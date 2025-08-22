@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marjan Habibi | Portfolio</title>
+  <meta name="theme-color" content="#0f0c29" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome (Free) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg1:#0f0c29; /* deep navy */
+      --bg2:#302b63; /* indigo */
+      --bg3:#24243e; /* purple-blue */
+      --primary:#a64cff; /* purple accent */
+      --text:#ffffff;
+      --muted:#c9c9d1;
+    }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      background-attachment: fixed;
+      overflow-x:hidden;
+    }
+
+    /* ===== Splash / Welcome (full-screen) ===== */
+    #splash{
+      position:fixed; inset:0; z-index:9999;
+      display:flex; align-items:center; justify-content:center; flex-direction:column;
+      background: #000;
+      text-align:center;
+      padding: 2rem;
+    }
+    .splash-line{ position:relative; margin: 12px 0; }
+    .splash-line h1, .splash-line h2, .splash-line h3{
+      margin:0;
+      opacity:0; animation:fadeIn .9s forwards ease;
+      letter-spacing:.5px;
+    }
+    .splash-line h1{ font-weight:800; font-size: clamp(2rem, 5vw, 3.2rem); animation-delay:.1s; }
+    .splash-line h2{ font-weight:600; font-size: clamp(1.4rem, 4vw, 2.2rem); color: var(--primary); animation-delay: .9s; }
+    .splash-line h3{ font-weight:400; font-size: clamp(1rem, 3.2vw, 1.4rem); color: var(--muted); animation-delay: 1.7s; }
+
+    /* animated underline below each line */
+    .splash-line::after{
+      content:""; display:block; height:3px; background:var(--primary);
+      width:0; margin: 10px auto 0; border-radius: 999px;
+      animation: growLine 1.6s forwards ease;
+    }
+    .splash-line:nth-child(1)::after{ animation-delay:.6s; }
+    .splash-line:nth-child(2)::after{ animation-delay:1.4s; }
+    .splash-line:nth-child(3)::after{ animation-delay:2.2s; }
+
+    @keyframes growLine{ from{width:0;} to{width: 180px;} }
+    @keyframes fadeIn{ from{opacity:0; transform: translateY(6px);} to{opacity:1; transform:none;} }
+
+    /* Hide main app at start */
+    #app{ visibility:hidden; }
+    .show-app #app{ visibility:visible; }
+    .hide-splash #splash{ display:none; }
+
+    /* ===== Navbar (Bootstrap based) ===== */
+    .navbar{ background: transparent; }
+    .navbar .navbar-brand{ font-weight:800; letter-spacing:.5px; }
+    .navbar-nav .nav-link{ color:var(--text); opacity:.9; }
+    .navbar-nav .nav-link:hover{ color:var(--primary); }
+    .btn-cta{
+      background: var(--primary); color:#fff; border:none; border-radius:999px; padding:.5rem 1rem;
+    }
+    .btn-cta:hover{ filter:brightness(.92); }
+
+    /* ===== Hero ===== */
+    .hero{
+      min-height: 100vh; display:flex; align-items:center; position:relative;
+    }
+    .hero h1{ font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight:800; }
+    .hero p.lead{ color:var(--muted); }
+    .badge-skill{ background:#1e1e2f; border:1px solid rgba(255,255,255,.08); }
+    .social a{ color:#fff; opacity:.9; font-size:1.25rem; margin-right:.75rem; }
+    .social a:hover{ color:var(--primary); opacity:1; }
+
+    .hero-illus{ max-width:520px; width:100%; border-radius:1.25rem; box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+
+    /* ===== Sections ===== */
+    section{ scroll-margin-top:90px; }
+    .section-title{ font-weight:800; letter-spacing:.5px; }
+
+    /* Projects */
+    .project-card{ background:#161628; border:1px solid rgba(255,255,255,.06); border-radius:1.25rem; overflow:hidden; height:100%; }
+    .project-card img{ width:100%; height:180px; object-fit:cover; }
+
+    /* Footer */
+    footer{ border-top:1px solid rgba(255,255,255,.06); }
+
+    /* Utility */
+    .glass{
+      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: 1rem;
+    }
+
+    @media (max-width: 991.98px){ /* MD/LG breakpoint for layout tweaks */
+      .navbar{ background: rgba(0,0,0,.3); }
+      .hero{ padding-top: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Splash (Welcome) ===== -->
+  <div id="splash" role="dialog" aria-label="Welcome">
+    <div class="splash-line"><h1>Welcome</h1></div>
+    <div class="splash-line"><h2>I'm Marjan Habibi</h2></div>
+    <div class="splash-line"><h3>Frontend Developer</h3></div>
+  </div>
+
+  <!-- ===== Main App ===== -->
+  <div id="app">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark pt-3">
+      <div class="container">
+        <a class="navbar-brand" href="#home">Marjan</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+            <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            <li class="nav-item ms-lg-3"><a class="btn btn-cta" href="#contact">Hire Me</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <header id="home" class="hero">
+      <div class="container">
+        <div class="row align-items-center g-4">
+          <div class="col-12 col-lg-6">
+            <span class="badge badge-skill px-3 py-2 mb-3">Available for freelance</span>
+            <h1><span style="color:var(--primary)">Frontend</span> Developer</h1>
+            <p class="lead mb-4">Network & Telecom student building modern, responsive and user‑friendly websites with clean code and polished UI.
+            </p>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <a class="btn btn-cta" href="#portfolio"><i class="fa-solid fa-briefcase me-2"></i>Projects</a>
+              <a class="btn btn-outline-light" href="#contact"><i class="fa-regular fa-envelope me-2"></i>Contact Me</a>
+            </div>
+            <div class="social mt-2">
+              <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+              <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+              <a href="mailto:you@example.com" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+            <div class="mt-4 d-flex flex-wrap gap-2">
+              <span class="badge badge-skill px-3 py-2">HTML</span>
+              <span class="badge badge-skill px-3 py-2">CSS</span>
+              <span class="badge badge-skill px-3 py-2">JavaScript</span>
+              <span class="badge badge-skill px-3 py-2">Bootstrap</span>
+              <span class="badge badge-skill px-3 py-2">Tailwind</span>
+              <span class="badge badge-skill px-3 py-2">Git</span>
+              <span class="badge badge-skill px-3 py-2">Figma</span>
+              <span class="badge badge-skill px-3 py-2">SQL</span>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6 text-center">
+            <img class="hero-illus img-fluid" alt="Developer Illustration" 
+          src="https://a0.anyrgb.com/pngimg/300/891/illustration-coding-technology-web-programming-developer-startup.png">
+        </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="py-5">
+      <div class="container">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-6">
+            <h2 class="section-title mb-3">About Me</h2>
+            <p class="mb-3">I'm <strong>Marjan Habibi</strong>, a frontend developer focused on crafting delightful user experiences. I enjoy turning complex ideas into elegant, performant interfaces. Currently learning advanced UI patterns and improving my accessibility and design systems skills.</p>
+            <ul class="list-unstyled small text-light-50 mb-0">
+              <li class="mb-2"><i class="fa-regular fa-circle-check me-2 text-success"></i> Passion for clean code & pixel‑perfect UI</li>
+              <li class="mb-2"><i class="fa-regular fa-circle-check me-2 text-success"></i> Strong basics in HTML, CSS, JS and responsive design</li>
+              <li class="mb-2"><i class="fa-regular fa-circle-check me-2 text-success"></i> Open to internships, remote freelance, and collaborations</li>
+            </ul>
+          </div>
+          <div class="col-lg-6">
+            <div class="glass p-4">
+              <div class="row g-3">
+                <div class="col-6">
+                  <div class="small text-uppercase opacity-75">Location</div>
+                  <div class="fw-semibold">Afghanistan</div>
+                </div>
+                <div class="col-6">
+                  <div class="small text-uppercase opacity-75">Role</div>
+                  <div class="fw-semibold">Frontend Developer</div>
+                </div>
+                <div class="col-6">
+                  <div class="small text-uppercase opacity-75">Focus</div>
+                  <div class="fw-semibold">Web UI / UX</div>
+                </div>
+                <div class="col-6">
+                  <div class="small text-uppercase opacity-75">Status</div>
+                  <div class="fw-semibold">Available</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="portfolio" class="py-5">
+      <div class="container">
+        <h2 class="section-title mb-4">Selected Projects</h2>
+        <div class="row g-4">
+          <!-- Project 1 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="project-card">
+              <img src="https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=1200&auto=format&fit=crop" alt="Project preview"/>
+              <div class="p-3">
+                <h5 class="mb-1">Afghan Aria School Website</h5>
+                <p class="small text-secondary mb-2">Static website with responsive layout (HTML/CSS)</p>
+                <div class="d-flex gap-2">
+                  <a class="btn btn-sm btn-cta" href="#">Live</a>
+                  <a class="btn btn-sm btn-outline-light" href="#">Code</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Project 2 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="project-card">
+              <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="Project preview"/>
+              <div class="p-3">
+                <h5 class="mb-1">Cinema Website</h5>
+                <p class="small text-secondary mb-2">Landing + listings with clean UI (HTML/CSS/JS)</p>
+                <div class="d-flex gap-2">
+                  <a class="btn btn-sm btn-cta" href="#">Live</a>
+                  <a class="btn btn-sm btn-outline-light" href="#">Code</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Project 3 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="project-card">
+              <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop" alt="Project preview"/>
+              <div class="p-3">
+                <h5 class="mb-1">Foodie Hub (No-JS)</h5>
+                <p class="small text-secondary mb-2">Ordering UI using only Bootstrap 5</p>
+                <div class="d-flex gap-2">
+                  <a class="btn btn-sm btn-cta" href="#">Live</a>
+                  <a class="btn btn-sm btn-outline-light" href="#">Code</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-5">
+      <div class="container">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-6">
+            <h2 class="section-title mb-3">Contact</h2>
+            <p class="mb-4">Want to work together or say hello? Send me an email and I'll get back to you.</p>
+            <a class="btn btn-cta" href="mailto:you@example.com"><i class="fa-regular fa-envelope me-2"></i>you@example.com</a>
+          </div>
+          <div class="col-lg-6">
+            <div class="glass p-4">
+              <form onsubmit="event.preventDefault(); alert('Thanks! This is a demo form.');">
+                <div class="mb-3">
+                  <label class="form-label">Name</label>
+                  <input class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Message</label>
+                  <textarea class="form-control" rows="4" required></textarea>
+                </div>
+                <button class="btn btn-cta" type="submit">Send</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="py-4 text-center text-secondary">© <span id="year"></span> Marjan Habibi. All rights reserved.</footer>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ===== CONFIG =====
+    const SPLASH_DURATION = 5000; // 5 ثانیه
+ // 60,000 ms = 60s (change to 10000 for 10s)
+
+    // Show the app after splash timeout
+    window.addEventListener('DOMContentLoaded', () => {
+      const body = document.body;
+      setTimeout(() => {
+        body.classList.add('show-app','hide-splash');
+      }, SPLASH_DURATION);
+
+      // dynamic year
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Collapse mobile navbar on link click
+      const nav = document.getElementById('mainNav');
+      nav.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          const bsCollapse = bootstrap.Collapse.getOrCreateInstance(nav);
+          if (getComputedStyle(document.querySelector('.navbar-toggler')).display !== 'none') {
+            bsCollapse.hide();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
